@@ -37,7 +37,7 @@
             <label for="status" class="form-label">Status</label>
             <select name="status" class="form-control">
                 <option value="inicio" {{ $task->status == 'inicio' ? 'selected' : '' }}>Início</option>
-                <option value="em_execucao" {{ $task->status == 'em_execucao' ? 'selected' : '' }}>Em Execução</option>
+                <option value="em execucao" {{ $task->status == 'em execucao' ? 'selected' : '' }}>Em Execução</option>
                 <option value="finalizado" {{ $task->status == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
             </select>
         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\User;
 
 class TaskController extends Controller
 {
@@ -15,7 +16,8 @@ class TaskController extends Controller
 
     public function create()
     {
-        return view('tasks.create');
+        $users = User::all();
+        return view('tasks.create', compact('users'));
     }
 
     public function store(Request $request)
@@ -24,11 +26,12 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'status' => 'required|in:pendente,em andamento,concluída',
+            'status' => 'required|in:inicio,em execucao,finalizado',
+            'user_id' => 'required|exists:users,id'
         ]);
 
         Task::create($request->all());
-        return redirect()->route('tasks.index')->with('success', 'Tarefa criada com sucesso!');
+        return redirect()->route('tasks.index')->with('success', 'Tarefa atribuída com sucesso!');
     }
 
     public function edit(Task $task)

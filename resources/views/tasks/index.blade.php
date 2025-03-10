@@ -2,39 +2,18 @@
 
 @section('content')
 <div class="container">
-    <h2>Lista de Tarefas</h2>
-    <a href="{{ route('tasks.create') }}" class="btn btn-primary">Nova Tarefa</a>
+    <h2 class="mb-4">Minhas Tarefas</h2>
 
-    @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    {{-- Botões de ação --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{{ route('tasks.create') }}" class="btn btn-primary">Criar Nova Tarefa</a>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Status</th>
-                <th>Data de Vencimento</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($tasks as $task)
-            <tr>
-                <td>{{ $task->title }}</td>
-                <td>{{ ucfirst($task->status) }}</td>
-                <td>{{ $task->due_date ?? 'Sem data' }}</td>
-                <td>
-                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+        {{-- Componente de Filtro de Tarefas --}}
+        <livewire:task-filter />
+    </div>
+
+    {{-- Kanban Board com Livewire --}}
+    <livewire:kanban-board />
+
 </div>
 @endsection
