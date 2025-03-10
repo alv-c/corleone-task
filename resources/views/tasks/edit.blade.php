@@ -43,10 +43,18 @@
         </div>
 
         <div class="mb-3">
-            <label for="user_id" class="form-label">Atribuir para</label>
-            <select name="user_id" class="form-control">
+            <label for="user_id" class="form-label">Criado por</label>
+            <select name="user_id" class="form-control" disabled>
+                <option value="{{ $task->user_id }}" selected>{{ $task->user->name }}</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="assigned_to" class="form-label">Atribuir para</label>
+            <select name="assigned_to" class="form-control">
+                <option value="">-- Selecione um responsável --</option>
                 @foreach($users as $user)
-                <option value="{{ $user->id }}" {{ $task->user_id == $user->id ? 'selected' : '' }}>
+                <option value="{{ $user->id }}" {{ $task->assigned_to == $user->id ? 'selected' : '' }}>
                     {{ $user->name }}
                 </option>
                 @endforeach

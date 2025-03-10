@@ -8,12 +8,12 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="{{ route('tasks.create') }}" class="btn btn-primary">Criar Nova Tarefa</a>
 
-        {{-- Componente de Filtro de Tarefas --}}
+        {{-- Componente de Filtro de Tarefas (opcional) --}}
         <livewire:task-filter />
     </div>
 
-    {{-- Kanban Board com Livewire --}}
-    <livewire:kanban-board wire:key="kanban-board" />
+    {{-- Kanban Board só com minhas tarefas --}}
+    <livewire:kanban-board :onlyMine="true" wire:key="kanban-board-my-tasks" />
 
 </div>
 @endsection

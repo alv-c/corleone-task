@@ -17,7 +17,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('tasks', TaskController::class);
+    // Minhas tarefas
+    Route::get('/tasks', function () {
+        return view('tasks.index');
+    })->name('tasks.index');
+
+    // Dashboard (padrão do Breeze/Fortify/Jetstream)
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    // CRUD de tarefas
+    Route::resource('tasks', TaskController::class)->except(['index']);
 });
 
 require __DIR__ . '/auth.php';
