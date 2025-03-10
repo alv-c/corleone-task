@@ -26,7 +26,7 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'status' => 'required|in:inicio,em execucao,finalizado',
+            'status' => 'required|in:inicio,em execução,finalizado',
             'user_id' => 'required|exists:users,id'
         ]);
 

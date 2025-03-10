@@ -27,7 +27,6 @@ class KanbanBoard extends Component
         if ($task) {
             $task->update(['status' => $status]);
             $this->reloadTasks();
-            $this->emit('taskUpdated');
         }
     }
 

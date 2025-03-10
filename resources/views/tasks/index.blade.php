@@ -13,7 +13,7 @@
     </div>
 
     {{-- Kanban Board com Livewire --}}
-    <livewire:kanban-board />
+    <livewire:kanban-board wire:key="kanban-board" />
 
 </div>
 @endsection

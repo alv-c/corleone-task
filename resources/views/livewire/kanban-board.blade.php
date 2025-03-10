@@ -1,5 +1,8 @@
-<div class="d-flex justify-content-around">
-    @foreach (['inicio' => 'Início', 'em execucao' => 'Em Execução', 'finalizado' => 'Finalizado'] as $status => $label)
+<div
+    x-data
+    @task-moved.window="$wire.updateTaskStatus($event.detail.taskId, $event.detail.newStatus)"
+    class="d-flex justify-content-around">
+    @foreach (['inicio' => 'Início', 'em execução' => 'Em Execução', 'finalizado' => 'Finalizado'] as $status => $label)
     <div class="card w-30 p-2">
         <h4 class="text-center">{{ $label }}</h4>
         <div class="task-column bg-light p-2" ondrop="drop(event, '{{ $status }}')" ondragover="allowDrop(event)">
@@ -15,17 +18,25 @@
 </div>
 
 <script>
-    function allowDrop(event) {
-        event.preventDefault();
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        window.allowDrop = function(event) {
+            event.preventDefault();
+        }
 
-    function drag(event, taskId) {
-        event.dataTransfer.setData("taskId", taskId);
-    }
+        window.drag = function(event, taskId) {
+            event.dataTransfer.setData("taskId", taskId);
+        }
 
-    function drop(event, newStatus) {
-        event.preventDefault();
-        let taskId = event.dataTransfer.getData("taskId");
-        Livewire.emit('updateTaskStatus', taskId, newStatus);
-    }
+        window.drop = function(event, newStatus) {
+            event.preventDefault();
+            let taskId = event.dataTransfer.getData("taskId");
+
+            window.dispatchEvent(new CustomEvent('task-moved', {
+                detail: {
+                    taskId,
+                    newStatus
+                }
+            }));
+        }
+    });
 </script>

@@ -36,7 +36,7 @@
             <label for="status" class="form-label">Status</label>
             <select name="status" class="form-control">
                 <option value="inicio">Início</option>
-                <option value="em execucao">Em Execução</option>
+                <option value="em execução">Em Execução</option>
                 <option value="finalizado">Finalizado</option>
             </select>
         </div>
