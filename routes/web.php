@@ -8,24 +8,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Minhas tarefas
-    Route::get('/tasks', function () {
-        return view('tasks.index');
-    })->name('tasks.index');
+    // Dashboard de tarefas (com dados das tarefas)
+    Route::get('/dashboard', [TaskController::class, 'dashboard'])->name('dashboard');
 
-    // Dashboard (padrão do Breeze/Fortify/Jetstream)
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Minhas tarefas
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
 
     // CRUD de tarefas
     Route::resource('tasks', TaskController::class)->except(['index']);

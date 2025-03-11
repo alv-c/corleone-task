@@ -67,4 +67,10 @@ class TaskController extends Controller
         $task->delete();
         return redirect()->route('tasks.index')->with('success', 'Tarefa removida!');
     }
+
+    public function dashboard()
+    {
+        $tasks = Task::with('user', 'assignedUser')->orderBy('due_date', 'asc')->get();
+        return view('dashboard', compact('tasks'));
+    }
 }
