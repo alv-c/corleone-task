@@ -1,13 +1,21 @@
 <div class="container">
     <h2 class="mb-4">Minhas Tarefas</h2>
 
-    {{-- Campo de busca --}}
+    {{-- Campo de busca com botão Filtrar --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="{{ route('tasks.create') }}" class="btn btn-primary">Criar Nova Tarefa</a>
-        <input type="text" wire:model.debounce.500ms="search" placeholder="Buscar tarefa..." class="form-control" style="width: 300px;">
+
+        <div class="d-flex gap-2" style="width: 300px;">
+            <input type="text" wire:model="search" placeholder="Buscar tarefa..." class="form-control">
+            <button wire:click="filterTasks" class="btn btn-secondary">Filtrar</button>
+
+            @if (!empty($search))
+                <button wire:click="clearFilter" class="btn btn-outline-danger">Limpar</button>
+            @endif
+        </div>
     </div>
 
-    {{-- Kanban --}}
+    {{-- Kanban Board --}}
     <div
         x-data
         @task-moved.window="$wire.updateTaskStatus($event.detail.taskId, $event.detail.newStatus)"

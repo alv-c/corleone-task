@@ -8,32 +8,28 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskBoardPage extends Component
 {
-    public $search = ''; // Campo de busca
-    public $tasks = []; // Lista de tarefas
+    public $search = '';
+    public $tasks = [];
 
     public function mount()
     {
         $this->reloadTasks();
     }
 
-    // Atualiza tarefas quando a busca mudar
-    public function updatedSearch()
+    public function filterTasks()
     {
         $this->reloadTasks();
     }
 
-    // Recarrega tarefas do banco com filtro e "Minhas tarefas"
     public function reloadTasks()
     {
-        $query = Task::query()->orderBy('due_date', 'asc');
+        $query = Task::orderBy('due_date', 'asc');
 
-        // Apenas minhas tarefas
         $query->where(function ($q) {
             $q->where('user_id', Auth::id())
                 ->orWhere('assigned_to', Auth::id());
         });
 
-        // Filtro de busca
         if (!empty($this->search)) {
             $query->where(function ($q) {
                 $q->where('title', 'like', '%' . $this->search . '%')
@@ -44,14 +40,19 @@ class TaskBoardPage extends Component
         $this->tasks = $query->get();
     }
 
-    // Atualização do status via drag and drop
     public function updateTaskStatus($taskId, $status)
     {
         $task = Task::find($taskId);
         if ($task) {
             $task->update(['status' => $status]);
-            $this->reloadTasks(); // Atualiza o Kanban
+            $this->reloadTasks();
         }
+    }
+
+    public function clearFilter()
+    {
+        $this->search = '';
+        $this->reloadTasks();
     }
 
     public function render()
