@@ -70,7 +70,6 @@ class TaskController extends Controller
 
     public function dashboard()
     {
-        $tasks = Task::with('user', 'assignedUser')->orderBy('due_date', 'asc')->get();
-        return view('dashboard', compact('tasks'));
+        return view('dashboard');
     }
 }
