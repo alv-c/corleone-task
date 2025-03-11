@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class KanbanBoard extends Component
 {
-    public $tasks;
-    public $onlyMine = false; // Flag para exibir apenas minhas tarefas ou todas
+    public $tasks = [];
+    public $onlyMine = false;
 
-    protected $listeners = ['taskUpdated' => 'reloadTasks'];
+    protected $listeners = [
+        'taskUpdated' => 'reloadTasks',
+        'tasksFiltered' => 'updateFilteredTasks'
+    ];
 
     public function mount($onlyMine = false)
     {
@@ -23,11 +26,10 @@ class KanbanBoard extends Component
     {
         $query = Task::orderBy('due_date', 'asc');
 
-        // Se for página "Minhas Tarefas", filtrar por quem eu criei OU me atribuíram
         if ($this->onlyMine) {
             $query->where(function ($q) {
-                $q->where('user_id', Auth::id()) // Tarefas que eu criei
-                    ->orWhere('assigned_to', Auth::id()); // Tarefas atribuídas a mim
+                $q->where('user_id', Auth::id())
+                    ->orWhere('assigned_to', Auth::id());
             });
         }
 
@@ -40,8 +42,31 @@ class KanbanBoard extends Component
         if ($task) {
             $task->update(['status' => $status]);
             $this->reloadTasks();
-            $this->emit('taskUpdated');
+            $this->dispatch('taskUpdated');
         }
+    }
+
+    public function updateFilteredTasks($params)
+    {
+        dd($params);
+
+        $query = Task::query();
+
+        if ($this->onlyMine) {
+            $query->where(function ($q) {
+                $q->where('user_id', Auth::id())
+                    ->orWhere('assigned_to', Auth::id());
+            });
+        }
+
+        if (!empty($params['search'])) {
+            $query->where(function ($q) use ($params) {
+                $q->where('title', 'like', '%' . $params['search'] . '%')
+                    ->orWhere('description', 'like', '%' . $params['search'] . '%');
+            });
+        }
+
+        $this->tasks = $query->orderBy('due_date', 'asc')->get();
     }
 
     public function render()
