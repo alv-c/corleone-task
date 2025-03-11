@@ -27,7 +27,8 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
             'status' => 'required|in:inicio,em execução,finalizado',
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|exists:users,id',
+            'assigned_to' => 'nullable|exists:users,id'
         ]);
 
         Task::create($request->all());
@@ -36,7 +37,8 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        return view('tasks.edit', compact('task'));
+        $users = User::all();
+        return view('tasks.edit', compact('task', 'users'));
     }
 
     public function update(Request $request, Task $task)
@@ -45,7 +47,8 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'status' => 'required|in:pendente,em andamento,concluída',
+            'status' => 'required|in:inicio,em execução,finalizado',
+            'assigned_to' => 'nullable|exists:users,id'
         ]);
 
         $task->update($request->all());

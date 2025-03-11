@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    protected $fillable = ['title', 'description', 'status', 'due_date', 'user_id'];
+    protected $fillable = ['title', 'description', 'status', 'due_date', 'user_id', 'assigned_to'];
 
     public function user(): BelongsTo
     {
